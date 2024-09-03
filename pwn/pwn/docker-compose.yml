@@ -1,0 +1,17 @@
+services:
+  pwn-app:
+    build: .
+    ports:
+      - "1234:1234"
+    volumes:
+      - ./chall:/app/chall
+      # - ./hook.so:/app/hook.so
+    # environment:
+    # - LD_PRELOAD=/app/hook.so
+    tty: true
+    privileged: false
+    cap_add:
+      - SYS_PTRACE
+    command: ["chmod +x /app/chall"]
+    # command: ["gdbserver", "0.0.0.0:1234", "./chall"]
+    command: ["./chall"]
