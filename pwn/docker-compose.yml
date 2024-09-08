@@ -15,5 +15,6 @@ services:
     cap_add:
       - SYS_PTRACE
     command:
-      bash -c "dropbear -jkEF"
-      # && gdbserver 0.0.0.0:1234 ./ch6"
+      bash -c "/usr/sbin/sshd -eD"
+      # && dropbear -jkEF"
+      # && gdbserver 0.0.0.0:1234 ./chall"

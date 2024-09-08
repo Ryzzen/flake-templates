@@ -18,17 +18,22 @@ RUN echo 'poun\npoun' | passwd
 
 RUN apt-get update \
   && apt-get install -y lib32z1 \
-  && apt-get install -y dropbear \
+  && apt-get install -y python3 \
+  # && apt-get install -y dropbear \
+  && apt-get install -y openssh-server \
   && apt-get install -y gcc \
-  # && apt-get install -y gdbserver \
+  && apt-get install -y gdbserver \
 	# && apt-get install -y gdb \
 	# && apt-get install -y wget \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
+RUN useradd -rm -d /home/poun -s /bin/bash -g root -G sudo -u 1000 poun
+RUN echo 'poun\npoun' | passwd poun
+RUN mkdir /var/run/sshd
 # Dropbear setup
-RUN mkdir -p /etc/dropbear \
-    && dropbearkey -t dss -f /etc/dropbear/dropbear_dss_host_key
+# RUN mkdir -p /etc/dropbear \
+#     && dropbearkey -t dss -f /etc/dropbear/dropbear_dss_host_key
 
 # bata24 gef setup
 # RUN wget -q https://raw.githubusercontent.com/bata24/gef/dev/install.sh
