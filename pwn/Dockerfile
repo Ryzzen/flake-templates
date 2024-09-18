@@ -8,7 +8,7 @@ EXPOSE 22
 
 WORKDIR /app
 
-# ADD overlay/ /
+ADD overlay/ /
 
 # Building from scratch
 # ADD ${LOWER_ROOTFS_ARCHIVE} /
