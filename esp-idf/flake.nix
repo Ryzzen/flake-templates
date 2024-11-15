@@ -3,12 +3,10 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-
     esp-idf = {
-      url = "github:espressif/esp-idf/master";
+      url = "git+https://github.com/espressif/esp-idf?submodules=1&&ref=release/v5.4";
       flake = false;
     };
-
   };
 
   outputs =
