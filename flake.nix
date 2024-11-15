@@ -17,7 +17,6 @@
           path = ./esp-idf;
           description = "Quick and dirty FHS for ESP-IDF developpment";
         };
-
       };
     };
 }
