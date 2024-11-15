@@ -13,6 +13,11 @@
           path = ./zephyr-rtos;
           description = "Minimal nix shell for zephyr-rtos developpment";
         };
+        esp-idf = {
+          path = ./esp-idf;
+          description = "Quick and dirty FHS for ESP-IDF developpment";
+        };
+
       };
     };
 }
