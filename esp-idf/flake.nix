@@ -1,5 +1,6 @@
-# flake.nix
 {
+  description = "Quick and dirty FHS for ESP-IDF developpment";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
