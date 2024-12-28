@@ -17,6 +17,11 @@
           path = ./esp-idf;
           description = "Quick and dirty FHS for ESP-IDF developpment";
         };
+        c-cpp = {
+          path = ./c-cpp;
+          description = "C/C++ Developpment environement";
+        };
+
       };
     };
 }
