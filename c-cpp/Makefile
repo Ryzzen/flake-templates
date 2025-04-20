@@ -2,47 +2,44 @@ TARGET 			:= app
 TARGET_HEX  ?= $(TARGET).hex
 TARGET_BIN  ?= $(TARGET).bin
 
-SRC_DIRS			:= src
+DEBUG ?= 1
+BUILD_DIR			?= build
+SRC_DIRS			?= src
 INC_DIRS 			:= $(shell find $(SRC_DIRS) -type d)
-BUILD_DIR			:= build
-
-INC_FLAGS := $(addprefix -I,$(INC_DIRS))
-INC_FLAGS += -lmath
-INC_FLAGS += $(shell pkg-config --cflags --libs gio-2.0)
 
 AS			?= clang
 CC			?= clang
 CXX			?= clang++
 OBJCOPY ?= objcopy
 
-CFLAGS = $(INC_FLAGS) \
-		-Wall \
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
+INC_FLAGS += -lmath
+FLAGS = -Wall \
     -Wextra \
-		-D_REENTRANT
-
-CFLAGS_DEBUG := -g3 \
-    -O \
-    -DDEBUG
-
-CFLAGS_RELEASE := -O2 \
+FLAGS_DEBUG := -g3 \
+    -O
+FLAGS_RELEASE := -O2 \
     -march=native \
     -mtune=native \
     -ftree-vectorize
 
-EXE		:= $(BUILD_DIR)/$(TARGET)
+ASFLAGS ?= $(FLAGS) -x assembler $(INC_FLAGS) -MMD -MP
+CFLAGS ?=  $(FLAGS) $(INC_FLAGS) -std=gnu17 -MMD -MP
+CPPFLAGS ?=  $(FLAGS) $(INC_FLAGS) -std=gnu17 -MMD -MP
+LDFLAGS ?= $(FLAGS) #--specs=nano.specs --specs=nosys.specs
+
+ifeq ($(DEBUG), 1)
+    FLAGS += $(FLAGS_DEBUG) -DDEBUG
+else
+    FLAGS += $(FLAGS_RELEASE) -DRELEASE
+endif
+
 SRCS	:= $(shell find $(SRC_DIRS) -name *.cpp -or -name *.c -or -name *.S)
 OBJS	:= $(SRCS:%=$(BUILD_DIR)/%.o)
+DEPS := $(OBJS:.o=.d)
 
-all: debug
-
-debug: CFLAGS += $(CFLAGS_DEBUG)
-debug: $(EXE)
-
-release: CFLAGS += $(CFLAGS_RELEASE)
-release: $(EXE)
-
-$(EXE): $(OBJS)
-	$(CC) $(OBJS) -o $@ $(CFLAGS)
+$(BUILD_DIR)/$(TARGET): $(OBJS)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 	$(OBJCOPY) -Oihex   $@ $(BUILD_DIR)/$(TARGET_HEX)
 	$(OBJCOPY) -Obinary $@ $(BUILD_DIR)/$(TARGET_BIN)
 
@@ -54,17 +51,16 @@ $(BUILD_DIR)/%.S.o: %.S
 # c source
 $(BUILD_DIR)/%.c.o: %.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 # c++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CPPFLAGS) -c $< -o $@
 
 clean:
-	rm -rf build
+	rm -rf $(BUILD_DIR)
 
-rebuild: clean all
+.PHONY: clean 
 
-.PHONY: all clean rebuild debug release
-
+-include $(DEPS)
