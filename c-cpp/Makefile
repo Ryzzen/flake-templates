@@ -13,9 +13,8 @@ CXX			?= clang++
 OBJCOPY ?= objcopy
 
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
-INC_FLAGS += -lmath
 FLAGS = -Wall \
-    -Wextra \
+    -Wextra
 FLAGS_DEBUG := -g3 \
     -O
 FLAGS_RELEASE := -O2 \
