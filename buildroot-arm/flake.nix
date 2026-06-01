@@ -46,8 +46,11 @@
             wget
             git
 
-            # for `make menuconfig`
+            # for `make menuconfig` — needs both the lib (out) and headers/.pc (dev),
+            # plus pkg-config so kconfig's check-lxdialog.sh can locate ncursesw
             ncurses
+            ncurses.dev
+            pkg-config
 
             # for running the resulting ARM image
             # e.g. qemu-system-arm -M vexpress-a9 -kernel output/images/zImage ...
