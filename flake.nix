@@ -17,6 +17,10 @@
         c-cpp = {
           path = ./c-cpp;
         };
+        buildroot-arm = {
+          path = ./buildroot-arm;
+          description = "FHS shell for Buildroot ARM development";
+        };
 
       };
     };
